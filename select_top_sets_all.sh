@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
+DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 function select_top_sets {
-    perl select_top_sets.pl --top="$top_n" --pattern="$pattern" --transcripts="$1/$transcript_fn" > "$out_dir/$(basename "$1")_top.fasta"
+    perl "$DIR/select_top_sets.pl" --top="$top_n" --pattern="$pattern" --transcripts="$1/$transcript_fn" > "$out_dir/$(basename "$1")_top.fasta"
 }
 # DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 # source optionsh.sh
