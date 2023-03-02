@@ -52,5 +52,6 @@ export transcript_fn
 export out_dir
 export top_n
 export pattern
+export DIR
 export -f select_top_sets
 parallel "-j$(($(nproc)-1))" select_top_sets ::: "${dirlist[@]}"
