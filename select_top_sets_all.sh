@@ -20,6 +20,7 @@ transcript_fn="transcripts.fasta"
 out_dir="$PWD"
 top_n=10000
 pattern="^.*cov_([0-9]+(?:\.[0-9]+))_g([0-9]+)_i([0-9]+)"
+jobs="$(($(nproc)-1))"
 while [ "$#" -gt 0 ]; do
     case "$1" in
 	"-t" | "--transcripts")
@@ -38,6 +39,10 @@ while [ "$#" -gt 0 ]; do
 	    shift;
 	    pattern="$1"
 	    ;;
+	"-j" | "--jobs")
+	    shift;
+	    jobs="$1"
+	    ;;
 	*)
 	    if ! [ -d "$1" ]; then
 		>&2 echo "Directory $1 does not exist."
@@ -48,10 +53,11 @@ while [ "$#" -gt 0 ]; do
     esac
     shift
 done
+mkdir -p "$out_dir"
 export transcript_fn
 export out_dir
 export top_n
 export pattern
 export DIR
 export -f select_top_sets
-parallel "-j$(($(nproc)-1))" select_top_sets ::: "${dirlist[@]}"
+parallel "-j$jobs" select_top_sets ::: "${dirlist[@]}"
