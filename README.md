@@ -86,14 +86,14 @@ the count of genes is simply the number of sequences in the file, but some
 assemblers (e.g., SPAdes) may produce multiple "isoforms" per gene, making
 counting the number of genes slightly more difficult.
 
-Like [`select_top_genes.pl`](#select_top_genespl), this script accepts a path to
+Like [`select_top_sets.pl`](#select_top_setspl), this script accepts a path to
 a FASTA file containing the transcripts and optionally accepts a Perl regular
 expression for parsing sequence headers. Requirements for the regular expression
-are slightly different from those of `select_top_genes.pl`&mdash;for
+are slightly different from those of `select_top_sets.pl`&mdash;for
 `count_genes.pl`, at least two capture groups are still needed, but only the
 second capture group, assumed to be the gene ID, is used.
 
-Unlike [`select_top_genes.pl`], `count_genes.pl` can read its input
+Unlike [`select_top_sets.pl`], `count_genes.pl` can read its input
 transcriptome from standard input because only one pass through the file is
 needed to count the number of genes.
 
@@ -114,12 +114,12 @@ Two capture groups are needed, but only the second capture group is used. The
 second capture group is interpreted as the gene ID. The first capture group may
 capture anything, including any empty string, but the default value for this
 option uses the first group to capture coverage. (This is convenient since it
-allows `count_genes.pl` and `select_top_genes.pl` to use the same regex.)
+allows `count_genes.pl` and `select_top_sets.pl` to use the same regex.)
 
 ### select\_top\_sets\_all.sh
 
 This script selects the top $n$ genes from multiple input transcriptomes in
-parallel. The script uses [`select_top_genes.pl`](#select_top_genespl) and GNU
+parallel. The script uses [`select_top_sets.pl`](#select_top_setspl) and GNU
 Parallel, and like the former script, it accepts a regular expression for
 extracting a transcript's coverage and gene ID from its FASTA sequence header.
 
