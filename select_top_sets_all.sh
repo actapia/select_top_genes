@@ -147,4 +147,10 @@ export top_n
 export pattern
 export DIR
 export -f select_top_sets
-parallel "-j$jobs" select_top_sets ::: "${dirlist[@]}"
+if which parallel; then
+    parallel "-j$jobs" select_top_sets ::: "${dirlist[@]}"
+else
+    for f in "${dirlist[@]}"; do
+	select_top_sets "$f"
+    done
+fi
