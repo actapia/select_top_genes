@@ -25,6 +25,13 @@ function select_top_sets {
     # the output filename would be $out_dir/data1_top.fasta.
     perl "$DIR/select_top_sets.pl" --top="$top_n" --pattern="$pattern" --transcripts="$1/$transcript_fn" > "$out_dir/$(basename "$1")_top.fasta"
 }
+
+function have_command {
+    # Determine if we have a command available on the system.
+    which "$1" > /dev/null
+    echo $?
+}
+
 readonly transcripts_flag="--transcripts"
 readonly top_n_flag="--top-n"
 readonly out_dir_flag="--out-dir"
@@ -58,7 +65,19 @@ transcript_fn="transcripts.fasta"
 out_dir="$PWD"
 top_n=10000
 pattern="^.*cov_([0-9]+(?:\.[0-9]+))_g([0-9]+)_i([0-9]+)"
-jobs="$(($(nproc)-1))"
+case 0 in
+    "$(have_command "nproc")")
+	jobs="$(($(nproc) - 1))"
+	;;
+    "$(have_command "sysctl")")
+	jobs="$(($(sysctl -n hw.ncpu) - 1))"
+	;;
+    *)
+	>&2 echo "Could not determine number of logical cores on system."
+	>&2 echo "Defaulting to 1 parallel job."
+	jobs=1
+	;;
+esac
 while [ "$#" -gt 0 ]; do
     case "$1" in
 	"$transcripts_flag" | "${ARG_SHORT[$transcripts_flag]}")
